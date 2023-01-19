@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class Encoder {
     public static final String ENCRYPTED = "src/Files/encrypted.txt";
-
     public static String key;
 
     public static void cleanup() {

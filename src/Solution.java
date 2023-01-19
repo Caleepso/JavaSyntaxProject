@@ -1,5 +1,4 @@
 public class Solution {
-    private static String key;
     public static void main(String[] args) {
         Menu.setHeader();
         runMode(Menu.getChoice());
