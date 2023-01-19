@@ -50,15 +50,12 @@ public class Decoder {
              FileWriter writer = new FileWriter(w)) {
             while (reader.ready()) {
                 char symbol = (char)reader.read();
-                int indexA = Alphabet.ALPHABET.indexOf(symbol);
                 int indexL = Alphabet.LETTERS.indexOf(symbol);
                 int indexN = Alphabet.NUMBERS.indexOf(symbol);
-                if (indexA != -1) {
-                    if (indexN != -1) {
-                        symbol = Alphabet.getDecoded(Alphabet.NUMBERS, Integer.parseInt(key), indexN);
-                    } else if (indexL != -1) {
-                        symbol = Alphabet.getDecoded(Alphabet.LETTERS, Integer.parseInt(key)*2, indexL);
-                    }
+                if (indexN != -1) {
+                    symbol = Alphabet.getDecoded(Alphabet.NUMBERS, Integer.parseInt(key), indexN);
+                } else if (indexL != -1) {
+                    symbol = Alphabet.getDecoded(Alphabet.LETTERS, Integer.parseInt(key)*2, indexL);
                 }
                 writer.write(symbol);
             }
@@ -103,19 +100,13 @@ public class Decoder {
         File file = new File(f);
         try {
             String fileToString = FileUtils.readFileToString(file, Charset.defaultCharset());
-            System.out.println(fileToString);
             HashMap<Character, Integer> map = getMap(fileToString);
             char c = 'а';
             for (int i = 0; i < 7; i++) {
                 int maxValueInMap = (Collections.max(map.values()));
-                System.out.println(i);
                 for (Map.Entry<Character, Integer> entry : map.entrySet()) {
                     if (entry.getValue() == maxValueInMap) {
-                        System.out.println(map);
-                        System.out.println(maxValueInMap);
                         c = entry.getKey();
-                        System.out.println(c);
-                        map.remove(c);
                         break;
                     }
                 }
@@ -139,10 +130,13 @@ public class Decoder {
                     break;
                 }
             }
-        } catch (IOException e){}
+        } catch (IOException e){
+            System.err.println("Что-то пошло совсем не так, сеанс работы завершен : " + e);
+            System.exit(1);
+        }
     }
 
-    public static HashMap<Character, Integer> getMap (String s) { //в разрезе строки раскодированного файла
+    public static HashMap<Character, Integer> getMap (String s) {
         String str = s.replaceAll("[^а-яёА-ЯЁ]","").toLowerCase();
         char[] charArray = str.toCharArray();
         HashMap<Character, Integer> map = new HashMap<>();

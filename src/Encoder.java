@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,15 +44,12 @@ public class Encoder {
              FileWriter writer = new FileWriter(w)) {
             while (reader.ready()) {
                 char symbol = (char)reader.read();
-                int indexA = Alphabet.ALPHABET.indexOf(symbol);
                 int indexL = Alphabet.LETTERS.indexOf(symbol);
                 int indexN = Alphabet.NUMBERS.indexOf(symbol);
-                if (indexA != -1) {
-                    if (indexN != -1) {
-                        symbol = Alphabet.getEncoded(Alphabet.NUMBERS, Integer.parseInt(key), indexN);
-                    } else if (indexL != -1) {
-                        symbol = Alphabet.getEncoded(Alphabet.LETTERS, Integer.parseInt(key)*2, indexL);
-                    }
+                if (indexN != -1) {
+                    symbol = Alphabet.getEncoded(Alphabet.NUMBERS, Integer.parseInt(key), indexN);
+                } else if (indexL != -1) {
+                    symbol = Alphabet.getEncoded(Alphabet.LETTERS, Integer.parseInt(key)*2, indexL);
                 }
                 writer.write(symbol);
             }
@@ -62,6 +58,4 @@ public class Encoder {
             System.exit(1);
         }
     }
-
-
 }
