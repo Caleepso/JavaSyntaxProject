@@ -1,7 +1,7 @@
 public class Alphabet {
     public static final String LETTERS = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
     public static final String NUMBERS = "0123456789";
-    public static final int[] secretPositions = {15, 5, 0, 9, 14, 19, 18};
+    public static final int[] SECRET = {15, 5, 0, 9, 14, 19, 18};
 
     static char getEncoded(String s, int key, int curPos){
         int shift = key % s.length();

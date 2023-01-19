@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 public class Decoder {
     public static String key;
     public static final String DECODED = "src/Files/decoded.txt";
-    public static final String DICT = "src/Files/dictionary.txt";
+    public static final int ATTEMPTS = 7;
     public static void decodeMode() {
         System.out.println("Работа в режиме расшифровки:");
         System.out.print("Введите криптографический ключ: ");
@@ -65,75 +65,27 @@ public class Decoder {
         }
     }
 
-    public static void bruteForce() {
+    public static void bruteForceMode() {
         System.out.println("Работа в режиме bruteForce-расшифровки файла (шифр Цезаря):");
         System.out.print("Введите абсолютный путь к зашифрованному .txt-файлу: ");
         String file = Menu.checkPath();
-        try(Scanner s = new Scanner(System.in)) {
-            int i = 0;
-            while (true) {
-                String con;
-                decode(file, DECODED, Integer.toString(i + 1));
-                i++;
-                System.out.print("Итерация расшифровки №" + i + " завершена. Проверьте файл по пути src/Files/decoded.txt." +
-                        "Продолжить попытки расшифровки? (да\\нет) ");
-                while (true) {
-                    con = s.next();
-                    if (!(con.equalsIgnoreCase("да") | con.equalsIgnoreCase("нет"))) {
-                        System.out.print("Введите ответ: да \\ нет ");
-                    } else {
-                        break;
-                    }
-                }
-                if (con.equalsIgnoreCase("нет")) {
-                    System.out.println("Сеанс работы завершен");
-                    break;
-                }
+        int i = 0;
+        while (true) {
+            decode(file, DECODED, Integer.toString(i + 1));
+            String con = iterateDecodeMode(i);
+            i++;
+            if (con.equalsIgnoreCase("нет")) {
+                System.out.println("Сеанс работы завершен");
+                break;
             }
         }
     }
 
-    public static void analyzeStat() {
+    public static void analyzeStatMode() {
         System.out.println("Работа в режиме статистического анализа содержимого файла (шифр Цезаря):");
         System.out.print("Введите абсолютный путь к зашифрованному .txt-файлу: ");
         String f = Menu.checkPath();
-        File file = new File(f);
-        try {
-            String fileToString = FileUtils.readFileToString(file, Charset.defaultCharset());
-            HashMap<Character, Integer> map = getMap(fileToString);
-            char c = 'а';
-            for (int i = 0; i < 7; i++) {
-                int maxValueInMap = (Collections.max(map.values()));
-                for (Map.Entry<Character, Integer> entry : map.entrySet()) {
-                    if (entry.getValue() == maxValueInMap) {
-                        c = entry.getKey();
-                        break;
-                    }
-                }
-                int maxPos = Alphabet.LETTERS.indexOf(c) / 2;
-                int shift = Math.abs(maxPos - Alphabet.secretPositions[i]);
-                decode(f, DECODED, Integer.toString(shift));
-                Scanner s = new Scanner(System.in);
-                String con;
-                System.out.print("Итерация расшифровки №"+(i+1)+" завершена. Проверьте файл по пути src/Files/decoded.txt."+
-                            " Продолжить попытки расшифровки? (да\\нет) ");
-                while (true) {
-                    con = s.next();
-                    if (!(con.equalsIgnoreCase("да") | con.equalsIgnoreCase("нет"))) {
-                        System.out.print("Введите ответ: да \\ нет ");
-                    } else {
-                        break;
-                    }
-                }
-                if (con.equalsIgnoreCase("нет")) {
-                    System.out.println("Сеанс работы завершен");
-                    break;
-                }
-            }
-        } catch (IOException e){
-            System.err.println("Что-то пошло совсем не так, сеанс работы завершен : " + e);
-            System.exit(1);
-        }
+        processFile(f);
     }
 
     public static HashMap<Character, Integer> getMap (String s) {
@@ -146,4 +98,48 @@ public class Decoder {
         }
         return map;
    }
+    public static void processFile(String f) {
+        try {
+            File file = new File(f);
+            String fileToString = FileUtils.readFileToString(file, Charset.defaultCharset());
+            HashMap<Character, Integer> map = getMap(fileToString);
+            char c = 'а';
+            for (int i = 0; i < ATTEMPTS; i++) {
+                int maxValueInMap = (Collections.max(map.values()));
+                for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+                    if (entry.getValue() == maxValueInMap) {
+                        c = entry.getKey();
+                        break;
+                    }
+                }
+                int maxPos = Alphabet.LETTERS.indexOf(c) / 2;
+                int shift = Math.abs(maxPos - Alphabet.SECRET[i]);
+                decode(f, DECODED, Integer.toString(shift));
+                String con = iterateDecodeMode(i);
+                if (con.equalsIgnoreCase("нет")) {
+                    System.out.println("Сеанс работы завершен");
+                    break;
+                }
+            }
+        } catch (IOException e){
+            System.err.println("Что-то пошло совсем не так, сеанс работы завершен : " + e);
+            System.exit(1);
+        }
+    }
+
+    public static String iterateDecodeMode(int i) {
+        Scanner s = new Scanner(System.in);
+        String con;
+        System.out.print("Итерация расшифровки №"+(i+1)+" завершена. Проверьте файл по пути src/Files/decoded.txt."+
+                " Продолжить попытки расшифровки? (да \\ нет) ");
+        while (true) {
+            con = s.next();
+            if (!(con.equalsIgnoreCase("да") | con.equalsIgnoreCase("нет"))) {
+                System.out.print("Введите ответ: да \\ нет ");
+            } else {
+                break;
+            }
+        }
+        return con;
+    }
 }

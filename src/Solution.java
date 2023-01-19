@@ -14,9 +14,9 @@ public class Solution {
         } else if (mode == 2) {
             Decoder.decodeMode();
         } else if (mode == 3) {
-            Decoder.bruteForce();
+            Decoder.bruteForceMode();
         } else if (mode == 4) {
-            Decoder.analyzeStat();
+            Decoder.analyzeStatMode();
         }
     }
 }
