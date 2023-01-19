@@ -5,7 +5,7 @@ public class Solution {
         runMode(Menu.getChoice());
     }
 
-    static void runMode (int mode) {
+    public static void runMode (int mode) {
         if (mode == 5) {
             System.out.println("Сеанс работы завершен");
             System.exit(0);
