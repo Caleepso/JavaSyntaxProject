@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public class Menu {
     private static String item;
+
     public static void setHeader(){
         System.out.println("\n" +
                 "❰ ██ ◗ █ █〓 ▚▘  █ ▜▛ ");
@@ -16,6 +17,7 @@ public class Menu {
         System.out.println("5. Завершение работы" + "\n");
         System.out.print("Ваш выбор: ");
     }
+
     public static int getChoice(){
         int choice = 0;
         Scanner s = new Scanner(System.in);
@@ -31,8 +33,9 @@ public class Menu {
         }
         return choice;
     }
+
     public static boolean validate(String s, int stage) {
-        String regexp = null;
+        String regexp;
         if (stage == 1) {
             regexp = "[1-5]";
             Pattern p = Pattern.compile(regexp);
@@ -51,7 +54,7 @@ public class Menu {
 
     public static String checkPath() {
         Scanner s = new Scanner(System.in);
-        boolean pathExists = false;
+        boolean pathExists;
         String file;
         while (true) {
             file = s.next();

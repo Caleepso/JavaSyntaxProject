@@ -13,6 +13,7 @@ public class Decoder {
     public static String key;
     public static final String DECODED = "src/Files/decoded.txt";
     public static final int ATTEMPTS = 7;
+
     public static void decodeMode() {
         System.out.println("Работа в режиме расшифровки:");
         System.out.print("Введите криптографический ключ: ");
@@ -29,6 +30,7 @@ public class Decoder {
         decode(Encoder.ENCRYPTED, DECODED, key);
         System.out.println("Расшифрованный файл располагается в директории Files/decoded.txt");
     }
+
     public static void checkFile() {
         File f = new File(Encoder.ENCRYPTED);
         if (!f.isFile()) {
@@ -98,6 +100,7 @@ public class Decoder {
         }
         return map;
    }
+
     public static void processFile(String f) {
         try {
             File file = new File(f);

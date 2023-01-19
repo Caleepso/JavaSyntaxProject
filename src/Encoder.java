@@ -8,8 +8,9 @@ import java.util.Scanner;
 
 public class Encoder {
     public static final String ENCRYPTED = "src/Files/encrypted.txt";
-    public static String file;
+
     public static String key;
+
     public static void cleanup() {
         try {
             Path encrypted = Paths.get(ENCRYPTED);
@@ -20,6 +21,7 @@ public class Encoder {
             System.exit(1);
         }
     }
+
     public static void encryptMode () {
         System.out.println("Работа в режиме шифрования:");
         System.out.print("Введите абсолютный путь к .txt-файлу: ");

@@ -11,6 +11,7 @@ public class Alphabet {
         }
         return s.charAt(shiftIndex);
     }
+
     public static char getDecoded(String s, int key, int curPos){
         int shift = key % s.length();
         int shiftIndex = curPos - shift;
